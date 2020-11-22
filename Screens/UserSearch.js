@@ -28,35 +28,43 @@ const UserSearch = ({navigation,route}) => {
 
   const isFocused = useIsFocused();
 
-  // useEffect(
-  //   () => {
-  //    setSearchUser("");
-  //   },[isFocused]
-  // )
+  useEffect(
+    () => {
+     checkUser();
+    },[searchUser]
+  )
 
-  const fetchUser = async () => {
+  const checkUser = () => {
     try {
-      const {data} = await Axios.get(`https://api.github.com/users/${searchUser}`);
+      const {data} = Axios.get(`https://api.github.com/users/${searchUser}`);
       const details = data;
       setUser(details);
-      console.log(details);
-      console.log(user);
-      Keyboard.dismiss();
-      navigation.push('User',{details});
-
-      // if(!user){
-      //   navigation.push('UserNotFound',{searchUser});
-      // }
-      // else{
-      //   navigation.push('User',{user});
-      // }
+      // console.log(details);
+      console.log(searchUser);
     } catch (error) {
-        // console.error(error);
+        setUser(null);
+        console.error('There has been a problem with your fetch operation');
+        // ADD THIS THROW error
+        //  throw error;
         // console.log(searchUser);
-        Keyboard.dismiss();
-        navigation.push('UserNotFound',{searchUser});
     }
   }
+
+    const changeScreen = () => {
+      if(!user){
+        Keyboard.dismiss();
+        console.log(user);
+        navigation.push('UserNotFound',{searchUser});
+      }
+      else{
+        Keyboard.dismiss();
+        // console.error(user);
+        navigation.push('User',{user});
+       
+      }
+    }
+
+
 
   return (
     <Container style={styles.container}>
@@ -81,7 +89,7 @@ const UserSearch = ({navigation,route}) => {
                   style={{fontSize:15,color:'#fff'}} 
                 />
             </Item>
-            <Button block onPress={()=>fetchUser()} style={styles.button}>
+            <Button block onPress={changeScreen} style={styles.button}>
                 <Text>Search</Text>
             </Button>
         </Form>

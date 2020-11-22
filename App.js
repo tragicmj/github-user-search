@@ -59,6 +59,7 @@ const App = () => {
                   headerTintColor: '#ffffff',
                   headerTitleAlign:'center'
                 }}
+                
               >
               </Stack.Screen>
           </Stack.Navigator>
